@@ -1,5 +1,6 @@
 import React from 'react';
 import { Navbar, Nav, Container, Button, Form, FormControl, InputGroup } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const NavigationBar = () => {
   return (
@@ -34,10 +35,10 @@ const NavigationBar = () => {
 
           {/* Link di navigazione a destra */}
           <Nav className="ml-auto">
-            <Nav.Link href="/explore">Profilo</Nav.Link>
-            <Nav.Link href="/login">Registrati</Nav.Link>
-            <Nav.Link href="/login">Login</Nav.Link>
-            <Button href="/upload" variant="outline-dark">Submit an image</Button>
+          <Nav.Link as={Link} to="/profilo">Profilo</Nav.Link>
+            <Nav.Link as={Link} to="/register">Registrati</Nav.Link> 
+            <Nav.Link as={Link} to="/login">Login</Nav.Link>
+            <Button as={Link} to="/upload" variant="outline-dark">Submit an image</Button>
           </Nav>
         </Navbar.Collapse>
       </Container>
