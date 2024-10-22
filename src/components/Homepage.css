@@ -1,0 +1,11 @@
+/* Homepage.css */
+
+/* Effetto hover per ingrandire l'immagine */
+.hover-image-effect {
+    transition: transform 0.3s ease;
+  }
+  
+  .hover-image-effect:hover {
+    transform: scale(1.05);
+  }
+  

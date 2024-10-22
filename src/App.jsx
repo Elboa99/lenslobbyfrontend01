@@ -6,6 +6,8 @@ import NavigationBar from "./components/NavigationBar";
 import Homepage from "./components/Homepage";
 import RegisterPage from "./components/RegisterPage";
 import LoginPage from "./components/LoginPage";
+import ProfilePage from "./components/ProfilePage";
+import AboutUsPage from "./components/AboutUsPage";
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
           <Route path="/" element={<Homepage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage/>}/>
+          <Route path="/profilo" element={<ProfilePage/>}/>
+          <Route path="/aboutus" element={<AboutUsPage />} />
         </Routes>
       </>
     </BrowserRouter>

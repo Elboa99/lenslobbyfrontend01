@@ -39,6 +39,7 @@ const NavigationBar = () => {
             <Nav.Link as={Link} to="/register">Registrati</Nav.Link> 
             <Nav.Link as={Link} to="/login">Login</Nav.Link>
             <Button as={Link} to="/upload" variant="outline-dark">Submit an image</Button>
+            <Nav.Link href="/aboutus">About Us</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
