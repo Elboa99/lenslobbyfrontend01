@@ -1,5 +1,4 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavigationBar from "./components/NavigationBar";
@@ -8,17 +7,29 @@ import RegisterPage from "./components/RegisterPage";
 import LoginPage from "./components/LoginPage";
 import ProfilePage from "./components/ProfilePage";
 import AboutUsPage from "./components/AboutUsPage";
+import { useState, useEffect } from "react";
 
 function App() {
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []); 
+
   return (
     <BrowserRouter>
       <>
-        <NavigationBar />
+      <NavigationBar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
         <Routes>
           
           <Route path="/" element={<Homepage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/login" element={<LoginPage/>}/>
+          <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/profilo" element={<ProfilePage/>}/>
           <Route path="/aboutus" element={<AboutUsPage />} />
         </Routes>

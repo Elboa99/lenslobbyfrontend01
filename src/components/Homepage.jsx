@@ -17,8 +17,8 @@ const Homepage = () => {
   }, []);
 
   return (
-    <Container fluid className="homepage-container mt-5">
-      <div className="hero-section text-center">
+    <Container fluid className="homepage-container mt-5 pt-2  ">
+      <div className="hero-section text-center ">
         <h1 className="hero-title">Benvenuto su LensLobby</h1>
         <p className="hero-subtitle">Esplora le foto dei migliori fotografi freelance.</p>
       </div>

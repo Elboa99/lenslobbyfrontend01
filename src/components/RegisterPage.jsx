@@ -1,24 +1,54 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
   // Stato per salvare i dati
   const [nome, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [profileImage, setProfileImage] = useState(null);
+  const [coverImage, setCoverImage] = useState(null);
+  const navigate = useNavigate();
 
   // Funzione per gestire la registrazione
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     
-    // invio dati backend
-    console.log('Registrazione:', { nome, email, password });
+    const formData = new FormData();
+    formData.append('nome', nome);
+    formData.append('email', email);
+    formData.append('password', password);
+    if (profileImage) {
+      formData.append('profileImage', profileImage);
+    }
+    if (coverImage) {
+      formData.append('coverImage', coverImage);
+    }
 
-    // Chiamata per registrare l'utente
+    try {
+      const response = await fetch('http://localhost:3001/authorization/register', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        setUsername('');
+        setEmail('');
+        setPassword('');
+        setProfileImage(null);
+        setCoverImage(null);
+        navigate('/login');
+      } else {
+        console.error('Errore nella registrazione:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Errore nella registrazione:', error);
+    }
   };
 
   return (
-    <Container className="mt-5">
+    <Container className="mt-5 pt-5">
       <Row className="justify-content-md-center">
         <Col md={6}>
           <h2>Registrati</h2>
@@ -56,6 +86,22 @@ const RegisterPage = () => {
               />
             </Form.Group>
 
+            <Form.Group controlId="formProfileImage" className="mb-3">
+              <Form.Label>Immagine del Profilo</Form.Label>
+              <Form.Control
+                type="file"
+                onChange={(e) => setProfileImage(e.target.files[0])}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formCoverImage" className="mb-3">
+              <Form.Label>Immagine di Copertina</Form.Label>
+              <Form.Control
+                type="file"
+                onChange={(e) => setCoverImage(e.target.files[0])}
+              />
+            </Form.Group>
+
             <Button variant="primary" type="submit">
               Registrati
             </Button>
@@ -66,4 +112,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default RegisterPage
