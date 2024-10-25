@@ -33,6 +33,7 @@ function App() {
           <Route path="/profilo" element={<ProfilePage/>}/>
           <Route path="/aboutus" element={<AboutUsPage />} />
         </Routes>
+
       </>
     </BrowserRouter>
   );
