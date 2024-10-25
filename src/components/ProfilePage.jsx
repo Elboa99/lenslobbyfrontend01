@@ -1,12 +1,13 @@
-
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Image, Card } from 'react-bootstrap';
+import { Container, Row, Col, Image, Card, Modal, Button } from 'react-bootstrap';
 import './ProfilePage.css';
 
 const ProfilePage = () => {
   const [fotografo, setFotografo] = useState({});
   const [immagini, setImmagini] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const fetchFotografoData = async () => {
@@ -16,17 +17,16 @@ const ProfilePage = () => {
           console.error('Token mancante. Accedi nuovamente.');
           return;
         }
-  
+
         const response = await fetch('http://localhost:3001/fotografi/me', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
           },
         });
-  
+
         if (response.ok) {
           const data = await response.json();
-          console.log('Dati del fotografo:', data); // Log per verificare i dati ricevuti
           setFotografo(data);
           setImmagini(data.immagini || []);
           setLoading(false);
@@ -37,9 +37,19 @@ const ProfilePage = () => {
         console.error('Errore nel recuperare i dati del fotografo:', error);
       }
     };
-  
+
     fetchFotografoData();
   }, []);
+
+  const handleImageClick = (immagine) => {
+    setSelectedImage(immagine);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedImage(null);
+  };
 
   if (loading) {
     return <div>Caricamento in corso...</div>;
@@ -71,7 +81,7 @@ const ProfilePage = () => {
         {immagini.length > 0 ? (
           immagini.map((immagine) => (
             <Col md={4} className="mb-4" key={immagine.id}>
-              <Card>
+              <Card onClick={() => handleImageClick(immagine)} style={{ cursor: 'pointer' }}>
                 <Card.Img variant="top" src={immagine.url} className="card-img-top" />
                 <Card.Body>
                   <Card.Text>{immagine.descrizione}</Card.Text>
@@ -83,6 +93,27 @@ const ProfilePage = () => {
           <p>Non hai ancora caricato immagini.</p>
         )}
       </Row>
+
+      {/* Modale per l'immagine ingrandita */}
+      <Modal show={showModal} onHide={handleCloseModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Dettagli Immagine</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedImage && (
+            <>
+              <Image src={selectedImage.url} fluid className="mb-3" />
+              <p><strong>Descrizione:</strong> {selectedImage.descrizione}</p>
+              <p><strong>Categoria:</strong> {selectedImage.categoria}</p>
+            </>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Chiudi
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };
