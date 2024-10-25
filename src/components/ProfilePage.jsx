@@ -51,6 +51,40 @@ const ProfilePage = () => {
     setSelectedImage(null);
   };
 
+  const handleDeleteImage = async (imageId) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert("Devi essere autenticato per eliminare un'immagine");
+      return;
+    }
+
+    const confirmDelete = window.confirm("Sei sicuro di voler eliminare questa immagine?");
+    if (!confirmDelete) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:3001/immagini/${imageId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        alert("Immagine eliminata con successo.");
+        // Rimuovi l'immagine dall'array delle immagini nello stato
+        setImmagini((prevImmagini) => prevImmagini.filter((immagine) => immagine.id !== imageId));
+        handleCloseModal(); // Chiudi il modal dopo l'eliminazione
+      } else {
+        console.error("Errore durante l'eliminazione dell'immagine:", response.statusText);
+        alert("Errore durante l'eliminazione dell'immagine.");
+      }
+    } catch (error) {
+      console.error('Errore durante l\'eliminazione dell\'immagine:', error);
+    }
+  };
+
   if (loading) {
     return <div>Caricamento in corso...</div>;
   }
@@ -112,6 +146,11 @@ const ProfilePage = () => {
           <Button variant="secondary" onClick={handleCloseModal}>
             Chiudi
           </Button>
+          {selectedImage && (
+            <Button variant="danger" onClick={() => handleDeleteImage(selectedImage.id)}>
+              Elimina Immagine
+            </Button>
+          )}
         </Modal.Footer>
       </Modal>
     </Container>

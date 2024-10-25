@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Navbar, Nav, Container, Button, Form, FormControl, InputGroup, Modal } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 
-const NavigationBar = ({ isAuthenticated, setIsAuthenticated }) => {
+const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfilo }) => {
   const [showModal, setShowModal] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [imageDescription, setImageDescription] = useState('');
@@ -40,40 +40,48 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated }) => {
 
   const handleSubmitImage = async () => {
     if (imageFile && selectedCategory) {
-        const formData = new FormData();
-        formData.append('fileImmagine', imageFile);
-        formData.append('descrizione', imageDescription);
-        formData.append('categoria', selectedCategory);
+      const formData = new FormData();
+      formData.append('fileImmagine', imageFile);
+      formData.append('descrizione', imageDescription);
+      formData.append('categoria', selectedCategory);
+    
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert("Devi essere autenticato per caricare un'immagine");
+        return;
+      }
+  
+      try {
+        const response = await fetch('http://localhost:3001/immagini/createWithFile', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+          body: formData
+        });
+  
+        if (response.ok) {
+          alert("Immagine caricata con successo.");
+          setShowModal(false);
+          
+          // Chiama il callback per aggiornare i dati del profilo
+          aggiornaDatiProfilo();
 
-        try {
-            const response = await fetch('http://localhost:3001/immagini/createWithFile', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                },
-                body: formData
-            });
-
-            if (response.ok) {
-                alert("Immagine caricata con successo.");
-                setShowModal(false);
-                // Resetta il form
-                setImageFile(null);
-                setImageDescription('');
-                setSelectedCategory('');
-            } else {
-                alert("Errore durante il caricamento dell'immagine.");
-            }
-        } catch (error) {
-            console.error('Errore nel caricamento dell\'immagine:', error);
+          // Resetta il form
+          setImageFile(null);
+          setImageDescription('');
+          setSelectedCategory('');
+        } else {
+          console.error("Errore durante il caricamento dell'immagine:", response.statusText);
+          alert("Errore durante il caricamento dell'immagine.");
         }
+      } catch (error) {
+        console.error('Errore nel caricamento dell\'immagine:', error);
+      }
     } else {
-        alert("Per favore, compila tutti i campi richiesti.");
+      alert("Per favore, compila tutti i campi richiesti.");
     }
-};
-
-  
-  
+  };
 
   return (
     <>

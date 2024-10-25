@@ -33,3 +33,35 @@
 .profile-page h2 {
   margin-top: 40px; 
 }
+
+.card {
+  position: relative;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: space-between; /* Fa sì che il pulsante e il testo siano separati */
+}
+
+.card-body .btn-danger {
+  margin-top: 10px;
+  align-self: flex-end; /* Posiziona il pulsante a destra */
+  width: 100%;
+  background-color: #dc3545; /* Colore di pericolo */
+  color: white;
+  border: none;
+  transition: all 0.3s;
+}
+
+.card-body .btn-danger:hover {
+  background-color: #c82333; /* Colore più scuro per l'hover */
+  transform: scale(1.05); /* Effetto di zoom per dare feedback visivo */
+}
+
+.modal-body {
+  max-height: 500px;
+  overflow-y: auto;
+}
