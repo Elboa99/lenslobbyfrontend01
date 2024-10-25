@@ -16,24 +16,20 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
     setCategories(['RITRATTO', 'PAESAGGIO', 'NATURA']); // Questo dovrebbe essere aggiornato dinamicamente
   }, []);
 
-  // Funzione per il logout
   const handleLogout = () => {
     localStorage.removeItem('token');
     setIsAuthenticated(false);
     navigate('/');
   };
 
-  // Funzione per gestire il click sul pulsante "Submit an Image"
   const handleSubmitImageClick = () => {
     if (!isAuthenticated) {
       alert("Devi prima registrarti");
     } else {
-      // Mostra il modale per il caricamento dell'immagine
       setShowModal(true);
     }
   };
 
-  // Funzione per gestire il cambiamento dell'immagine
   const handleImageChange = (e) => {
     setImageFile(e.target.files[0]);
   };
@@ -44,30 +40,28 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
       formData.append('fileImmagine', imageFile);
       formData.append('descrizione', imageDescription);
       formData.append('categoria', selectedCategory);
-    
+
       const token = localStorage.getItem('token');
       if (!token) {
         alert("Devi essere autenticato per caricare un'immagine");
         return;
       }
-  
+
       try {
         const response = await fetch('http://localhost:3001/immagini/createWithFile', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
           },
-          body: formData
+          body: formData,
         });
-  
+
         if (response.ok) {
           alert("Immagine caricata con successo.");
           setShowModal(false);
           
-          // Chiama il callback per aggiornare i dati del profilo
-          aggiornaDatiProfilo();
+          aggiornaDatiProfilo(); // Aggiorna le immagini nel profilo
 
-          // Resetta il form
           setImageFile(null);
           setImageDescription('');
           setSelectedCategory('');
@@ -87,7 +81,6 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
     <>
       <Navbar bg="light" expand="lg" className="shadow-sm" fixed="top">
         <Container>
-          {/* Logo */}
           <Navbar.Brand as={Link} to="/">
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Unsplash_logo.svg/2560px-Unsplash_logo.svg.png"
@@ -96,12 +89,8 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
             />
           </Navbar.Brand>
 
-          {/* Bottone per mobile */}
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
-
-          {/* Link e barra di ricerca */}
           <Navbar.Collapse id="basic-navbar-nav">
-            {/* Barra di ricerca */}
             <Form className="d-flex mx-auto" style={{ maxWidth: '500px' }}>
               <InputGroup>
                 <InputGroup.Text>
@@ -111,7 +100,6 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
               </InputGroup>
             </Form>
 
-            {/* Link di navigazione a destra */}
             <Nav className="ml-auto">
               {isAuthenticated ? (
                 <>
@@ -133,7 +121,6 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
         </Container>
       </Navbar>
 
-      {/* Modale per caricare l'immagine */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Carica un'Immagine</Modal.Title>
