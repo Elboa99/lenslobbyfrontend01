@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Image, Card } from 'react-bootstrap';
 import './ProfilePage.css';
@@ -15,16 +16,17 @@ const ProfilePage = () => {
           console.error('Token mancante. Accedi nuovamente.');
           return;
         }
-
+  
         const response = await fetch('http://localhost:3001/fotografi/me', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
           },
         });
-
+  
         if (response.ok) {
           const data = await response.json();
+          console.log('Dati del fotografo:', data); // Log per verificare i dati ricevuti
           setFotografo(data);
           setImmagini(data.immagini || []);
           setLoading(false);
@@ -35,7 +37,7 @@ const ProfilePage = () => {
         console.error('Errore nel recuperare i dati del fotografo:', error);
       }
     };
-
+  
     fetchFotografoData();
   }, []);
 
