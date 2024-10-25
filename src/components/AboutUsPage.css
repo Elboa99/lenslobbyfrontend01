@@ -1,0 +1,66 @@
+.about-us-page {
+  font-family: Arial, sans-serif;
+  color: #333;
+  margin-top: 100px;
+}
+
+h1.display-4 {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.signature {
+  font-family: 'Brush Script MT', cursive;
+  font-size: 2rem;
+  margin-top: 20px;
+}
+
+.profile-image {
+  width: 100%;
+  height: auto;
+  border-radius: 50%; /* Rende l'immagine circolare */
+}
+
+.lead {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.testimonials {
+  margin-top: 40px;
+}
+
+.blockquote {
+  font-size: 1.5rem;
+  font-style: italic;
+}
+
+.blockquote-footer {
+  font-size: 1rem;
+  text-align: right;
+  font-style: normal;
+}
+
+.social-links {
+  text-align: left;
+}
+
+.social-links ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.social-links ul li {
+  margin-bottom: 10px;
+}
+
+.social-links ul li a {
+  text-decoration: none;
+  color: #000;
+  font-size: 1.2rem;
+}
+
+.social-links ul li a:hover {
+  text-decoration: underline;
+}

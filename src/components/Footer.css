@@ -1,0 +1,24 @@
+.footer {
+    background-color: #343a40; /* Colore di sfondo scuro */
+    color: white; /* Colore del testo */
+    height: 60px; /* Altezza del footer */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .footer a {
+    color: #ccc; /* Colore del testo dei link */
+    text-decoration: none;
+    margin-left: 15px;
+  }
+  
+  .footer a:hover {
+    color: #fff; /* Colore dei link al passaggio del mouse */
+    text-decoration: underline;
+  }
+  
+  .footer img {
+    height: 24px;
+  }
+  
