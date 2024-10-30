@@ -61,7 +61,41 @@
   transform: scale(1.05); /* Effetto di zoom per dare feedback visivo */
 }
 
-.modal-body {
-  max-height: 500px;
-  overflow-y: auto;
+.custom-modal .modal-content {
+  border-radius: 15px;
+  border: none;
+  overflow: hidden;
 }
+
+.custom-modal .modal-header,
+.custom-modal .modal-footer {
+  border: none;
+}
+
+.custom-modal .modal-title {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #343a40;
+}
+
+.custom-modal .modal-body img {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.custom-modal .modal-body p {
+  font-size: 1rem;
+  color: #495057;
+}
+
+.custom-modal .modal-footer button {
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.custom-modal .modal-footer button:hover {
+  background-color: #e9ecef;
+}
+
+

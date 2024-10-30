@@ -11,7 +11,7 @@ const Homepage = () => {
   useEffect(() => {
     const fetchImmagini = async () => {
       try {
-        const response = await fetch('http://localhost:3001/immagini/random?limit=10');
+        const response = await fetch('http://localhost:3001/immagini/random?limit=50');
         if (response.ok) {
           const data = await response.json();
           const validData = data.filter(immagine => immagine && immagine.id && immagine.fotografo);
@@ -72,17 +72,19 @@ const Homepage = () => {
         </Row>
       </Container>
 
-      {/* Modale con i dettagli dell'immagine */}
-      {selectedImage && (
-        <Modal show={showModal} onHide={handleCloseModal} centered>
+       {/* Modal for Image Details */}
+       {selectedImage && (
+        <Modal show={showModal} onHide={handleCloseModal} centered size="lg" className="custom-modal">
           <Modal.Header closeButton>
             <Modal.Title>Dettagli della Foto</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            <Image src={selectedImage.url} fluid className="mb-3" />
-            <h5>Fotografo: <Link to={`/fotografo/${selectedImage.fotografo.id}`}>{selectedImage.fotografo.nome}</Link></h5>
-            <p>Categoria: {selectedImage.categoria}</p>
-            <p>Descrizione: {selectedImage.descrizione}</p>
+          <Modal.Body className="d-flex flex-column align-items-center">
+            <Image src={selectedImage.url} fluid className="modal-image mb-3" />
+            <div className="text-center">
+              <h5>Fotografo: <Link to={`/fotografo/${selectedImage.fotografo.id}`}>{selectedImage.fotografo.nome}</Link></h5>
+              <p>Categoria: {selectedImage.categoria}</p>
+              <p>Descrizione: {selectedImage.descrizione}</p>
+            </div>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleCloseModal}>

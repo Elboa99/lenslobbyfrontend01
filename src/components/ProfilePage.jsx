@@ -140,30 +140,35 @@ const ProfilePage = () => {
         </Row>
 
         {/* Modale per l'immagine ingrandita */}
-        <Modal show={showModal} onHide={handleCloseModal} centered>
-          <Modal.Header closeButton>
-            <Modal.Title>Dettagli Immagine</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {selectedImage && (
-              <>
-                <Image src={selectedImage.url} fluid className="mb-3" />
-                <p><strong>Descrizione:</strong> {selectedImage.descrizione}</p>
-                <p><strong>Categoria:</strong> {selectedImage.categoria}</p>
-              </>
-            )}
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>
-              Chiudi
-            </Button>
-            {selectedImage && (
-              <Button variant="danger" onClick={() => handleDeleteImage(selectedImage.id)}>
-                Elimina Immagine
-              </Button>
-            )}
-          </Modal.Footer>
-        </Modal>
+        <Modal show={showModal} onHide={handleCloseModal} centered size="lg" className="custom-modal">
+  <Modal.Header closeButton style={{ backgroundColor: "#f8f9fa", borderBottom: "1px solid #ddd" }}>
+    <Modal.Title>Dettagli Immagine</Modal.Title>
+  </Modal.Header>
+  <Modal.Body className="d-flex flex-column align-items-center">
+    {selectedImage && (
+      <>
+        <Image src={selectedImage.url} fluid className="mb-3 rounded shadow" style={{ maxHeight: '70vh', width: 'auto' }} />
+        <div className="mt-3 text-center" style={{ width: "100%" }}>
+          <p className="text-muted mb-1"><strong>Descrizione:</strong></p>
+          <p className="text-secondary">{selectedImage.descrizione}</p>
+          <p className="text-muted mb-1"><strong>Categoria:</strong></p>
+          <p className="text-secondary">{selectedImage.categoria}</p>
+        </div>
+      </>
+    )}
+  </Modal.Body>
+  <Modal.Footer style={{ backgroundColor: "#f8f9fa", borderTop: "1px solid #ddd" }}>
+    <Button variant="outline-secondary" onClick={handleCloseModal} className="me-2">
+      Chiudi
+    </Button>
+    {selectedImage && (
+      <Button variant="outline-danger" onClick={() => handleDeleteImage(selectedImage.id)}>
+        Elimina Immagine
+      </Button>
+    )}
+  </Modal.Footer>
+</Modal>
+
       </Container>
     </>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col, Spinner, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
@@ -8,11 +8,13 @@ const RegisterPage = () => {
   const [password, setPassword] = useState('');
   const [profileImage, setProfileImage] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     const formData = new FormData();
     formData.append('nome', nome);
     formData.append('email', email);
@@ -31,19 +33,27 @@ const RegisterPage = () => {
       });
 
       if (response.ok) {
+        setSuccessMessage('Registrazione avvenuta con successo! Verrai reindirizzato al login.');
         setUsername('');
         setEmail('');
         setPassword('');
         setProfileImage(null);
         setCoverImage(null);
-        navigate('/login');
+        
+        // Attendi qualche secondo per mostrare il messaggio e poi reindirizza
+        setTimeout(() => {
+          setLoading(false);
+          navigate('/login');
+        }, 2000); // Ritardo di 2 secondi
       } else {
         console.error('Errore nella registrazione:', response.statusText);
         alert('Errore durante la registrazione. Riprova.');
+        setLoading(false);
       }
     } catch (error) {
       console.error('Errore nella registrazione:', error);
       alert('Si è verificato un errore. Riprova.');
+      setLoading(false);
     }
   };
 
@@ -52,6 +62,11 @@ const RegisterPage = () => {
       <Row className="justify-content-md-center">
         <Col md={6}>
           <h2>Registrati</h2>
+          {successMessage && (
+            <Alert variant="success">
+              {successMessage}
+            </Alert>
+          )}
           <Form onSubmit={handleRegister}>
             <Form.Group controlId="formUsername" className="mb-3">
               <Form.Label>Username</Form.Label>
@@ -102,8 +117,15 @@ const RegisterPage = () => {
               />
             </Form.Group>
 
-            <Button variant="primary" type="submit">
-              Registrati
+            <Button variant="primary" type="submit" disabled={loading}>
+              {loading ? (
+                <>
+                  <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />{' '}
+                  Registrazione in corso...
+                </>
+              ) : (
+                'Registrati'
+              )}
             </Button>
           </Form>
         </Col>

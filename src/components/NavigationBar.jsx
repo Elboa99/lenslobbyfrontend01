@@ -10,12 +10,12 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
   const [imageDescription, setImageDescription] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [categories, setCategories] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); // Stato per il caricamento
+  const [isLoading, setIsLoading] = useState(false); 
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    setCategories(['RITRATTO', 'PAESAGGIO', 'NATURA']); 
+    setCategories(['RITRATTO', 'PAESAGGIO', 'NATURA','MOTORI','ABSTRACT']); 
   }, []);
 
   const handleLogout = () => {
@@ -60,7 +60,7 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
 
   const handleSubmitImage = async () => {
     if (imageFile && selectedCategory) {
-      setIsLoading(true); // Imposta isLoading su true
+      setIsLoading(true); 
       const formData = new FormData();
       formData.append('fileImmagine', imageFile);
       formData.append('descrizione', imageDescription);
@@ -69,7 +69,7 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
       const token = localStorage.getItem('token');
       if (!token) {
         alert("Devi essere autenticato per caricare un'immagine");
-        setIsLoading(false); // Imposta isLoading su false
+        setIsLoading(false);
         return;
       }
 
