@@ -40,7 +40,7 @@ const AboutUsPage = () => {
         <Col md={6}>
           <blockquote className="blockquote">
             <p>
-              "Beleive you can and you half way there"
+              "Belive you can and you half way there"
             </p>
             <footer className="blockquote-footer">
               Kenny Luigi Boateng

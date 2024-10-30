@@ -8,6 +8,8 @@ import LoginPage from "./components/LoginPage";
 import ProfilePage from "./components/ProfilePage";
 import AboutUsPage from "./components/AboutUsPage";
 import { useState, useEffect } from "react";
+import FotografoProfile from "./components/FotografoProfile"; 
+
 
 function App() {
 
@@ -32,7 +34,9 @@ function App() {
           <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/profilo" element={<ProfilePage/>}/>
           <Route path="/aboutus" element={<AboutUsPage />} />
+          <Route path="/fotografo/:id" element={<FotografoProfile />} />
         </Routes>
+        
 
       </>
     </BrowserRouter>

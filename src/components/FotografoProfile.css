@@ -1,0 +1,89 @@
+/* Profilo Fotografico - Pagina principale */
+.profile-page {
+    margin-top: 50px;
+  }
+  
+  /* Immagine di copertina */
+  .cover-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+  }
+  
+  /* Wrapper per l'immagine del profilo */
+  .profile-pic-wrapper {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Immagine del profilo */
+  .profile-pic {
+    width: 100%;
+    height: 100%;
+    border: 5px solid white;
+    object-fit: cover;
+  }
+  
+  /* Titolo del profilo */
+  .profile-page h2 {
+    margin-top: 60px;
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+  }
+  
+  /* Immagine delle card */
+  .card-img-top {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .card-img-top:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Card dei dettagli dell'immagine */
+  .card {
+    position: relative;
+    margin-bottom: 20px;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  /* Testo nella card */
+  .card-body p {
+    font-size: 14px;
+    color: #555;
+    margin: 5px 0;
+  }
+  
+  
+  /* Stile del Modale */
+  .modal-body {
+    max-height: 500px;
+    overflow-y: auto;
+  }
+  
+  /* Effetto hover e ombra */
+  .card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
+  }
+  

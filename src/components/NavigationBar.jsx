@@ -1,25 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import { Navbar, Nav, Container, Button, Form, FormControl, InputGroup, Modal } from 'react-bootstrap';
+import { Navbar, Nav, Container, Button, Form, FormControl, InputGroup, Modal, Spinner } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 
 const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfilo }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [imageDescription, setImageDescription] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [categories, setCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(false); // Stato per il caricamento
 
   const navigate = useNavigate();
 
-  // Fetch delle categorie disponibili dal backend (simulazione qui)
   useEffect(() => {
-    setCategories(['RITRATTO', 'PAESAGGIO', 'NATURA']); // Questo dovrebbe essere aggiornato dinamicamente
+    setCategories(['RITRATTO', 'PAESAGGIO', 'NATURA']); 
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     setIsAuthenticated(false);
     navigate('/');
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (searchTerm.trim() === '') return;
+
+    try {
+      const response = await fetch(`http://localhost:3001/fotografi/search?nome=${searchTerm}`);
+      if (response.ok) {
+        const data = await response.json();
+        setSearchResults(data);
+        navigate(`/search-results`, { state: { results: data } });
+      } else {
+        console.error("Errore durante la ricerca:", response.statusText);
+      }
+    } catch (error) {
+      console.error('Errore nella ricerca:', error);
+    }
   };
 
   const handleSubmitImageClick = () => {
@@ -36,6 +60,7 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
 
   const handleSubmitImage = async () => {
     if (imageFile && selectedCategory) {
+      setIsLoading(true); // Imposta isLoading su true
       const formData = new FormData();
       formData.append('fileImmagine', imageFile);
       formData.append('descrizione', imageDescription);
@@ -44,6 +69,7 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
       const token = localStorage.getItem('token');
       if (!token) {
         alert("Devi essere autenticato per caricare un'immagine");
+        setIsLoading(false); // Imposta isLoading su false
         return;
       }
 
@@ -60,7 +86,7 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
           alert("Immagine caricata con successo.");
           setShowModal(false);
           
-          aggiornaDatiProfilo(); // Aggiorna le immagini nel profilo
+          aggiornaDatiProfilo();
 
           setImageFile(null);
           setImageDescription('');
@@ -71,6 +97,8 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
         }
       } catch (error) {
         console.error('Errore nel caricamento dell\'immagine:', error);
+      } finally {
+        setIsLoading(false); // Imposta isLoading su false alla fine del caricamento
       }
     } else {
       alert("Per favore, compila tutti i campi richiesti.");
@@ -91,12 +119,18 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Form className="d-flex mx-auto" style={{ maxWidth: '500px' }}>
+            <Form className="d-flex mx-auto" style={{ maxWidth: '500px' }} onSubmit={handleSearch}>
               <InputGroup>
                 <InputGroup.Text>
                   <i className="bi bi-search"></i>
                 </InputGroup.Text>
-                <FormControl type="search" placeholder="Cerca Fotografo" />
+                <FormControl
+                  type="search"
+                  placeholder="Cerca Fotografo"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                />
+                <Button variant="outline-dark" type="submit">Cerca</Button>
               </InputGroup>
             </Form>
 
@@ -152,8 +186,15 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
           <Button variant="secondary" onClick={() => setShowModal(false)}>
             Chiudi
           </Button>
-          <Button variant="primary" onClick={handleSubmitImage}>
-            Carica Immagine
+          <Button variant="primary" onClick={handleSubmitImage} disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                Caricamento...
+              </>
+            ) : (
+              "Carica Immagine"
+            )}
           </Button>
         </Modal.Footer>
       </Modal>

@@ -1,11 +1,86 @@
-/* Homepage.css */
-
 /* Effetto hover per ingrandire l'immagine */
 .hover-image-effect {
-    transition: transform 0.3s ease;
-  }
-  
-  .hover-image-effect:hover {
-    transform: scale(1.05);
-  }
-  
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease;
+  border-radius: 8px;
+  display: block;
+  cursor: pointer; /* Cursore a forma di mano per indicare cliccabilità */
+}
+
+.hover-image-effect:hover {
+  transform: scale(1.05);
+}
+
+/* Container per la card dell'immagine */
+.image-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Overlay con solo il nome del fotografo */
+.overlay {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.6); /* Sfondo semi-trasparente */
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+/* Stile per il nome del fotografo */
+.photographer-name {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.photographer-name:hover {
+  text-decoration: underline; /* Sottolinea il nome al passaggio del mouse */
+}
+
+/* Modale - dettagli dell'immagine */
+.modal-body h5 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.modal-body p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.modal-body img {
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.hero-section {
+  margin-top: 30px; /* Distanza dalla navbar */
+  padding: 20px 0;
+  text-align: center;
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  color: #555;
+  margin-top: 10px;
+}
+
+.images-section {
+  margin-top: 30px; /* Ulteriore spazio tra il titolo e le immagini */
+}
+
