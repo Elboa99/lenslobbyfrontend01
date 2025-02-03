@@ -3,6 +3,7 @@ import { Navbar, Nav, Container, Button, Form, FormControl, InputGroup, ListGrou
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/Black_and_White_Photography_Camera_Photo_Studio_Logo_1.png';
 import './NavigationBar.css'; 
+import BASE_URL from '../config';
 
 const NavigationBar = ({ isAuthenticated, checkAuth, aggiornaDatiProfilo }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -34,7 +35,7 @@ const NavigationBar = ({ isAuthenticated, checkAuth, aggiornaDatiProfilo }) => {
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/fotografi/search?nome=${value}`);
+      const response = await fetch(`${BASE_URL}/fotografi/search?nome=${value}`);
       if (response.ok) {
         const data = await response.json();
         setSearchResults(data);
@@ -69,7 +70,7 @@ const NavigationBar = ({ isAuthenticated, checkAuth, aggiornaDatiProfilo }) => {
       }
   
       try {
-        const response = await fetch('http://localhost:3001/immagini/createWithFile', {
+        const response = await fetch(`${BASE_URL}/immagini/createWithFile`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` },
           body: formData,

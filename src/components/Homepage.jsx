@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Image, Modal, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './Homepage.css';
+import BASE_URL from '../config';
 
 const Homepage = () => {
   const [immagini, setImmagini] = useState([]);
@@ -11,7 +12,8 @@ const Homepage = () => {
   useEffect(() => {
     const fetchImmagini = async () => {
       try {
-        const response = await fetch('http://localhost:3001/immagini/random?limit=50');
+        const response = await fetch(`${BASE_URL}/immagini/random?limit=50`
+);
         if (response.ok) {
           const data = await response.json();
           const validData = data.filter(immagine => immagine && immagine.id && immagine.fotografo);

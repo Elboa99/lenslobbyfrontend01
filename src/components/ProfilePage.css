@@ -42,7 +42,7 @@
   filter: brightness(70%);
 }
 
-/* Overlay per il pulsante di modifica */
+
 .image-overlay {
   position: absolute;
   top: 0;
@@ -76,7 +76,7 @@
   margin-top: 40px; 
 }
 
-/* Stile migliorato per le card */
+
 .card {
   border: none;
   border-radius: 12px;
@@ -96,7 +96,7 @@
   height: 220px;
 }
 
-/* Contenuto della card */
+
 .card-body {
   text-align: center;
   padding: 20px;

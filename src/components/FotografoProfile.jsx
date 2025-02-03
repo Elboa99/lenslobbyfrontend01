@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Container, Row, Col, Image, Card, Modal, Button } from 'react-bootstrap';
 import NavigationBar from './NavigationBar';
 import './ProfilePage.css';
+import BASE_URL from '../config';
 
 const FotografoProfile = ({ isAuthenticated }) => {
   const { id } = useParams();
@@ -15,7 +16,7 @@ const FotografoProfile = ({ isAuthenticated }) => {
 
   const fetchFotografoData = useCallback(async () => {
     try {
-      const response = await fetch(`http://localhost:3001/fotografi/public/${id}`);
+      const response = await fetch(`${BASE_URL}/fotografi/public/${id}`);
       if (response.ok) {
         const data = await response.json();
         setFotografo(data);

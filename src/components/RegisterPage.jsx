@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Spinner, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import BASE_URL from '../config';
 
 
 const RegisterPage = () => {
@@ -28,7 +29,7 @@ const RegisterPage = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/authorization/register', {
+      const response = await fetch(`${BASE_URL}/authorization/register`, {
         method: 'POST',
         body: formData,
       });

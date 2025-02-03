@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Image, Button } from 'react-bootstrap';
 import NavigationBar from './NavigationBar';
 import './ProfilePage.css';
+import BASE_URL from '../config';
 
 const ProfilePage = () => {
   const [fotografo, setFotografo] = useState({});
@@ -18,7 +19,7 @@ const ProfilePage = () => {
           return;
         }
 
-        const response = await fetch('http://localhost:3001/fotografi/me', {
+        const response = await fetch(`${BASE_URL}/fotografi/me`, {
           method: 'GET',
           headers: { 'Authorization': `Bearer ${token}` },
         });
@@ -53,7 +54,7 @@ const ProfilePage = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/fotografi/me/${type === "profile" ? "avatar" : "cover"}`, {
+      const response = await fetch(`${BASE_URL}/fotografi/me/${type === "profile" ? "avatar" : "cover"}`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}` },
         body: formData,

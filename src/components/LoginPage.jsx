@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Spinner, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import BASE_URL from '../config';
 
 const LoginPage = ({ checkAuth }) => { // ✅ Accettiamo checkAuth come prop
   const [email, setEmail] = useState('');
@@ -15,7 +16,7 @@ const LoginPage = ({ checkAuth }) => { // ✅ Accettiamo checkAuth come prop
     setErrorMessage('');
 
     try {
-      const response = await fetch('http://localhost:3001/authorization/login', {
+      const response = await fetch(`${BASE_URL}/authorization/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
