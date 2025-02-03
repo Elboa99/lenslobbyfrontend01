@@ -72,18 +72,23 @@ const Homepage = () => {
         </Row>
       </Container>
 
-       {/* Modal for Image Details */}
-       {selectedImage && (
+      {/* Modal per Dettagli Immagine */}
+      {selectedImage && (
         <Modal show={showModal} onHide={handleCloseModal} centered size="lg" className="custom-modal">
           <Modal.Header closeButton>
             <Modal.Title>Dettagli della Foto</Modal.Title>
           </Modal.Header>
-          <Modal.Body className="d-flex flex-column align-items-center">
+          <Modal.Body>
             <Image src={selectedImage.url} fluid className="modal-image mb-3" />
-            <div className="text-center">
-              <h5>Fotografo: <Link to={`/fotografo/${selectedImage.fotografo.id}`}>{selectedImage.fotografo.nome}</Link></h5>
-              <p>Categoria: {selectedImage.categoria}</p>
-              <p>Descrizione: {selectedImage.descrizione}</p>
+            <div>
+              <h5>
+                Fotografo: 
+                <Link to={`/fotografo/${selectedImage.fotografo.id}`} className="text-decoration-none">
+                  {` ${selectedImage.fotografo.nome}`}
+                </Link>
+              </h5>
+              <p><strong>Categoria:</strong> {selectedImage.categoria}</p>
+              <p><strong>Descrizione:</strong> {selectedImage.descrizione}</p>
             </div>
           </Modal.Body>
           <Modal.Footer>

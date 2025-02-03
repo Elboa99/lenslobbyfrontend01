@@ -1,125 +1,113 @@
-import React, { useEffect, useState } from 'react';
-import { Navbar, Nav, Container, Button, Form, FormControl, InputGroup, Modal, Spinner } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Navbar, Nav, Container, Button, Form, FormControl, InputGroup, ListGroup, Modal, Spinner } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
+import logo from '../assets/Black_and_White_Photography_Camera_Photo_Studio_Logo_1.png';
+import './NavigationBar.css'; 
 
-const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfilo }) => {
+const NavigationBar = ({ isAuthenticated, checkAuth, aggiornaDatiProfilo }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [imageDescription, setImageDescription] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [categories, setCategories] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [categories, setCategories] = useState(['RITRATTO', 'PAESAGGIO', 'NATURA', 'MOTORI', 'ABSTRACT']);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setCategories(['RITRATTO', 'PAESAGGIO', 'NATURA','MOTORI','ABSTRACT']); 
-  }, []);
-
   const handleLogout = () => {
     localStorage.removeItem('token');
-    setIsAuthenticated(false);
+    checkAuth();
     navigate('/');
   };
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  const handleSearchChange = async (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (searchTerm.trim() === '') return;
+    if (value.trim() === '') {
+      setShowDropdown(false);
+      setSearchResults([]);
+      return;
+    }
 
     try {
-      const response = await fetch(`http://localhost:3001/fotografi/search?nome=${searchTerm}`);
+      const response = await fetch(`http://localhost:3001/fotografi/search?nome=${value}`);
       if (response.ok) {
         const data = await response.json();
         setSearchResults(data);
-        navigate(`/search-results`, { state: { results: data } });
+        setShowDropdown(data.length > 0);
       } else {
-        console.error("Errore durante la ricerca:", response.statusText);
+        console.error("Errore nella ricerca:", response.statusText);
       }
     } catch (error) {
-      console.error('Errore nella ricerca:', error);
+      console.error("Errore nella ricerca:", error);
     }
   };
 
-  const handleSubmitImageClick = () => {
-    if (!isAuthenticated) {
-      alert("Devi prima registrarti");
-    } else {
-      setShowModal(true);
-    }
-  };
-
-  const handleImageChange = (e) => {
-    setImageFile(e.target.files[0]);
+  const handleSelectPhotographer = (id) => {
+    setSearchTerm('');
+    setShowDropdown(false);
+    navigate(`/fotografo/${id}`);
   };
 
   const handleSubmitImage = async () => {
     if (imageFile && selectedCategory) {
-      setIsLoading(true); 
+      setIsLoading(true);
       const formData = new FormData();
       formData.append('fileImmagine', imageFile);
       formData.append('descrizione', imageDescription);
       formData.append('categoria', selectedCategory);
-
+  
       const token = localStorage.getItem('token');
       if (!token) {
         alert("Devi essere autenticato per caricare un'immagine");
         setIsLoading(false);
         return;
       }
-
+  
       try {
         const response = await fetch('http://localhost:3001/immagini/createWithFile', {
           method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
+          headers: { 'Authorization': `Bearer ${token}` },
           body: formData,
         });
-
+  
         if (response.ok) {
           alert("Immagine caricata con successo.");
           setShowModal(false);
-          
           aggiornaDatiProfilo();
-
           setImageFile(null);
           setImageDescription('');
           setSelectedCategory('');
         } else {
-          console.error("Errore durante il caricamento dell'immagine:", response.statusText);
+          console.error("Errore durante il caricamento:", response.statusText);
           alert("Errore durante il caricamento dell'immagine.");
         }
       } catch (error) {
-        console.error('Errore nel caricamento dell\'immagine:', error);
+        console.error("Errore nel caricamento:", error);
       } finally {
-        setIsLoading(false); // Imposta isLoading su false alla fine del caricamento
+        setIsLoading(false);
       }
     } else {
-      alert("Per favore, compila tutti i campi richiesti.");
+      alert("Compila tutti i campi richiesti.");
     }
   };
+  
 
   return (
     <>
       <Navbar bg="light" expand="lg" className="shadow-sm" fixed="top">
         <Container>
           <Navbar.Brand as={Link} to="/">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Unsplash_logo.svg/2560px-Unsplash_logo.svg.png"
-              alt="LensLobby"
-              style={{ height: '24px' }}
-            />
+            <img src={logo} alt="LensLobby" style={{ width: '100px' }} />
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Form className="d-flex mx-auto" style={{ maxWidth: '500px' }} onSubmit={handleSearch}>
+            <Form className="d-flex mx-auto position-relative" style={{ maxWidth: '500px' }}>
               <InputGroup>
                 <InputGroup.Text>
                   <i className="bi bi-search"></i>
@@ -129,18 +117,28 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
                   placeholder="Cerca Fotografo"
                   value={searchTerm}
                   onChange={handleSearchChange}
+                  onFocus={() => setShowDropdown(searchResults.length > 0)}
+                  onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
                 />
-                <Button variant="outline-dark" type="submit">Cerca</Button>
               </InputGroup>
+
+              {showDropdown && (
+                <ListGroup className="search-dropdown">
+                  {searchResults.map((fotografo) => (
+                    <ListGroup.Item key={fotografo.id} action onMouseDown={() => handleSelectPhotographer(fotografo.id)}>
+                      <img src={fotografo.immagineProfilo} alt="Profile" className="dropdown-search-img" />
+                      {fotografo.nome}
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              )}
             </Form>
 
             <Nav className="ml-auto">
               {isAuthenticated ? (
                 <>
                   <Nav.Link as={Link} to="/profilo">Profilo</Nav.Link>
-                  <Button variant="outline-dark" onClick={handleLogout} className="nav-Button">
-                    Logout
-                  </Button>
+                  <Button variant="outline-dark" onClick={handleLogout} className="nav-Button">Logout</Button>
                 </>
               ) : (
                 <>
@@ -148,7 +146,7 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
                   <Nav.Link as={Link} to="/login">Login</Nav.Link>
                 </>
               )}
-              <Button onClick={handleSubmitImageClick} variant="outline-dark" className="nav-button">Submit an image</Button>
+              <Button onClick={() => setShowModal(true)} variant="outline-dark" className="nav-button">Submit an image</Button>
               <Nav.Link as={Link} to="/aboutus">About Us</Nav.Link>
             </Nav>
           </Navbar.Collapse>
@@ -163,7 +161,7 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
           <Form>
             <Form.Group controlId="formImageFile" className="mb-3">
               <Form.Label>Seleziona un'immagine</Form.Label>
-              <Form.Control type="file" onChange={handleImageChange} />
+              <Form.Control type="file" onChange={(e) => setImageFile(e.target.files[0])} />
             </Form.Group>
             <Form.Group controlId="formImageDescription" className="mb-3">
               <Form.Label>Descrizione</Form.Label>
@@ -183,18 +181,9 @@ const NavigationBar = ({ isAuthenticated, setIsAuthenticated, aggiornaDatiProfil
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Chiudi
-          </Button>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>Chiudi</Button>
           <Button variant="primary" onClick={handleSubmitImage} disabled={isLoading}>
-            {isLoading ? (
-              <>
-                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
-                Caricamento...
-              </>
-            ) : (
-              "Carica Immagine"
-            )}
+            {isLoading ? <Spinner as="span" animation="border" size="sm" /> : "Carica Immagine"}
           </Button>
         </Modal.Footer>
       </Modal>

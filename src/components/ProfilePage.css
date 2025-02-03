@@ -1,13 +1,25 @@
-.profile-page {
-  margin-top: 50px;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap');
+
+
+
+/* Effetto scurimento al passaggio del mouse sulla copertina */
+.cover-image-container {
+  position: relative;
+  cursor: pointer;
 }
 
 .cover-image {
   width: 100%;
   height: 300px;
   object-fit: cover;
+  transition: filter 0.3s ease-in-out;
 }
 
+.cover-image-container:hover .cover-image {
+  filter: brightness(70%);
+}
+
+/* Effetto scurimento al passaggio del mouse sulla foto profilo */
 .profile-pic-wrapper {
   position: absolute;
   bottom: -50px;
@@ -15,6 +27,7 @@
   transform: translateX(-50%);
   width: 150px;
   height: 150px;
+  cursor: pointer;
 }
 
 .profile-pic {
@@ -22,7 +35,36 @@
   height: 100%;
   border: 5px solid white;
   object-fit: cover;
+  transition: filter 0.3s ease-in-out;
 }
+
+.profile-pic-wrapper:hover .profile-pic {
+  filter: brightness(70%);
+}
+
+/* Overlay per il pulsante di modifica */
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.cover-image-container:hover .image-overlay,
+.profile-pic-wrapper:hover .image-overlay {
+  opacity: 1;
+}
+
 
 .card-img-top {
   width: 100%;
@@ -34,49 +76,60 @@
   margin-top: 40px; 
 }
 
+/* Stile migliorato per le card */
 .card {
-  position: relative;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.card-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  justify-content: space-between; /* Fa sì che il pulsante e il testo siano separati */
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15);
 }
+
+.card-img-top {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  object-fit: cover;
+  height: 220px;
+}
+
+/* Contenuto della card */
+.card-body {
+  text-align: center;
+  padding: 20px;
+  font-family: 'Montserrat', sans-serif; 
+}
+
+.card-body p {
+  font-size: 14px;
+  color: #555;
+}
+
+.card-body strong {
+  font-weight: 600;
+  color: #333;
+}
+
 
 .card-body .btn-danger {
   margin-top: 10px;
-  align-self: flex-end; /* Posiziona il pulsante a destra */
   width: 100%;
-  background-color: #dc3545; /* Colore di pericolo */
+  font-weight: bold;
+  background-color: #dc3545;
   color: white;
+  border-radius: 8px;
   border: none;
   transition: all 0.3s;
 }
 
 .card-body .btn-danger:hover {
-  background-color: #c82333; /* Colore più scuro per l'hover */
-  transform: scale(1.05); /* Effetto di zoom per dare feedback visivo */
+  background-color: #b32d3a;
+  transform: scale(1.05);
 }
 
-.custom-modal .modal-content {
-  border-radius: 15px;
-  border: none;
-  overflow: hidden;
-}
-
-.custom-modal .modal-header,
-.custom-modal .modal-footer {
-  border: none;
-}
-
-.custom-modal .modal-title {
-  font-weight: bold;
-  font-size: 1.5rem;
-  color: #343a40;
-}
 
 .custom-modal .modal-body img {
   border-radius: 10px;
@@ -86,6 +139,10 @@
 .custom-modal .modal-body p {
   font-size: 1rem;
   color: #495057;
+}
+
+.custom-modal .modal-content {
+  font-family: 'Montserrat', sans-serif;
 }
 
 .custom-modal .modal-footer button {

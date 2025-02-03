@@ -10,34 +10,40 @@ import AboutUsPage from "./components/AboutUsPage";
 import { useState, useEffect } from "react";
 import FotografoProfile from "./components/FotografoProfile"; 
 
-
 function App() {
-
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  
-  useEffect(() => {
+  // Funzione per verificare l'autenticazione
+  const checkAuth = () => {
     const token = localStorage.getItem('token');
-    if (token) {
-      setIsAuthenticated(true);
-    }
-  }, []); 
+    setIsAuthenticated(!!token);
+  };
+
+  // Verifica l'autenticazione al mount e al cambio di localStorage
+  useEffect(() => {
+    checkAuth();
+    const handleStorageChange = () => checkAuth();
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   return (
     <BrowserRouter>
       <>
-      <NavigationBar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+        <NavigationBar isAuthenticated={isAuthenticated} checkAuth={checkAuth} />
         <Routes>
-          
-          <Route path="/" element={<Homepage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated} />} />
-          <Route path="/profilo" element={<ProfilePage/>}/>
+          <Route path="/" element={<Homepage checkAuth={checkAuth} />} />
+          <Route path="/register" element={<RegisterPage checkAuth={checkAuth} />} />
+          <Route path="/login" element={<LoginPage checkAuth={checkAuth} />} />
+          <Route path="/profilo" element={<ProfilePage checkAuth={checkAuth} />} />
           <Route path="/aboutus" element={<AboutUsPage />} />
-          <Route path="/fotografo/:id" element={<FotografoProfile />} />
+          <Route 
+            path="/fotografo/:id" 
+            element={<FotografoProfile checkAuth={checkAuth} isAuthenticated={isAuthenticated} />} 
+          />
         </Routes>
-        
-
       </>
     </BrowserRouter>
   );

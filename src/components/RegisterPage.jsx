@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Spinner, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
+
 const RegisterPage = () => {
   const [nome, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -58,7 +59,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <Container className="mt-5 pt-5">
+    <Container className="register-container" style={{ paddingTop: '150px' }}>
       <Row className="justify-content-md-center">
         <Col md={6}>
           <h2>Registrati</h2>
