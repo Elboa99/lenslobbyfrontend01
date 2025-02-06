@@ -54,6 +54,14 @@ const NavigationBar = ({ isAuthenticated, checkAuth, aggiornaDatiProfilo }) => {
     navigate(`/fotografo/${id}`);
   };
 
+  const handleOpenModal = () => {
+    if (!isAuthenticated) {
+      alert("Devi essere autenticato per caricare un'immagine");
+      return;
+    }
+    setShowModal(true);
+  };
+
   const handleSubmitImage = async () => {
     if (imageFile && selectedCategory) {
       setIsLoading(true);
@@ -96,7 +104,6 @@ const NavigationBar = ({ isAuthenticated, checkAuth, aggiornaDatiProfilo }) => {
       alert("Compila tutti i campi richiesti.");
     }
   };
-  
 
   return (
     <>
@@ -147,7 +154,11 @@ const NavigationBar = ({ isAuthenticated, checkAuth, aggiornaDatiProfilo }) => {
                   <Nav.Link as={Link} to="/login">Login</Nav.Link>
                 </>
               )}
-              <Button onClick={() => setShowModal(true)} variant="outline-dark" className="nav-button">Submit an image</Button>
+              {isAuthenticated && (
+                <Button onClick={handleOpenModal} variant="outline-dark" className="nav-button">
+                  Submit an image
+                </Button>
+              )}
               <Nav.Link as={Link} to="/aboutus">About Us</Nav.Link>
             </Nav>
           </Navbar.Collapse>
